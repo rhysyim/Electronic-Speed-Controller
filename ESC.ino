@@ -31,7 +31,7 @@ void setup() {
   pinMode(INC,OUTPUT);
 }
 
-int currentTime = micros();
+long long int currentTime = micros();
 double delaytime = delayTime(5, 12);
 int currentStep = 0;
   
