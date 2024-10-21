@@ -1,9 +1,8 @@
-const int pwmPin1 = 6;
-const int pwmPin2 = 9;
-const int pwmPin3 = 3;
+const int pwmPin1 = 16;
+const int pwmPin2 = 17;
+const int pwmPin3 = 18;
 
 void setup() {
-  // put your setup code here, to run once:
 Serial.begin(9600);
   pinMode(pwmPin1,OUTPUT);
   pinMode(pwmPin2,OUTPUT);
@@ -14,7 +13,7 @@ unsigned long long int prevMicros = 0;
 
 // float highRatio = 1;
 
-int freq = 200; //in Hz
+int freq = 50; //in kHz
 
 int totalPeriod = 1000000 / freq;
 
