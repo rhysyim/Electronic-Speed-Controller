@@ -527,27 +527,15 @@
     "netclass_patterns": [
       {
         "netclass": "MotorPWR",
-        "pattern": "Motor A"
+        "pattern": "Motor 1A"
       },
       {
         "netclass": "MotorPWR",
-        "pattern": "Motor B"
+        "pattern": "Motor 1B"
       },
       {
         "netclass": "MotorPWR",
-        "pattern": "Motor C"
-      },
-      {
-        "netclass": "Gates",
-        "pattern": "Gate 1C"
-      },
-      {
-        "netclass": "Gates",
-        "pattern": "Gate 1A"
-      },
-      {
-        "netclass": "Gates",
-        "pattern": "Gate 1B"
+        "pattern": "Motor 1C"
       },
       {
         "netclass": "Gates",
@@ -647,31 +635,71 @@
       },
       {
         "netclass": "MotorPWR",
-        "pattern": "Load 1A"
-      },
-      {
-        "netclass": "MotorPWR",
-        "pattern": "Load 1B"
-      },
-      {
-        "netclass": "MotorPWR",
-        "pattern": "Load 1C"
-      },
-      {
-        "netclass": "MotorPWR",
-        "pattern": "Load 2A"
-      },
-      {
-        "netclass": "MotorPWR",
-        "pattern": "Load 2B"
-      },
-      {
-        "netclass": "MotorPWR",
-        "pattern": "Load 2C"
-      },
-      {
-        "netclass": "MotorPWR",
         "pattern": "VPP"
+      },
+      {
+        "netclass": "MotorPWR",
+        "pattern": "VSS"
+      },
+      {
+        "netclass": "Gates",
+        "pattern": "Gate 1AL"
+      },
+      {
+        "netclass": "Gates",
+        "pattern": "Gate 1AH"
+      },
+      {
+        "netclass": "Gates",
+        "pattern": "Gate 1BH"
+      },
+      {
+        "netclass": "Gates",
+        "pattern": "Gate 1BL"
+      },
+      {
+        "netclass": "Gates",
+        "pattern": "Gate 1CH"
+      },
+      {
+        "netclass": "Gates",
+        "pattern": "Gate 1CL"
+      },
+      {
+        "netclass": "Gates",
+        "pattern": "Gate 2AL"
+      },
+      {
+        "netclass": "Gates",
+        "pattern": "Gate 2AH"
+      },
+      {
+        "netclass": "Gates",
+        "pattern": "Gate 2BH"
+      },
+      {
+        "netclass": "Gates",
+        "pattern": "Gate 2BL"
+      },
+      {
+        "netclass": "Gates",
+        "pattern": "Gate 2CH"
+      },
+      {
+        "netclass": "Gates",
+        "pattern": "Gate 2CL"
+      },
+      {
+        "netclass": "MotorPWR",
+        "pattern": "Motor 2A"
+      },
+      {
+        "netclass": "MotorPWR",
+        "pattern": "Motor 2B"
+      },
+      {
+        "netclass": "MotorPWR",
+        "pattern": "Motor 2C"
       }
     ]
   },
@@ -682,7 +710,7 @@
       "netlist": "",
       "plot": "",
       "pos_files": "",
-      "specctra_dsn": "../../../../../../../Users/rhys/Desktop/PCB.dsn",
+      "specctra_dsn": "../../../../../../../Users/rhys/Downloads/PCB.dsn",
       "step": "",
       "svg": "",
       "vrml": ""
