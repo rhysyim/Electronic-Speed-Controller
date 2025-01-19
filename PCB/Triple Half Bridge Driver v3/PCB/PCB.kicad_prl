@@ -12,7 +12,7 @@
       "pads": 0.5,
       "tracks": 0.8999999761581421,
       "vias": 1.0,
-      "zones": 0.6
+      "zones": 0.20000000298023224
     },
     "selection_filter": {
       "dimensions": true,
