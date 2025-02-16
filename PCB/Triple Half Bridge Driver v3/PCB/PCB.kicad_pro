@@ -708,7 +708,7 @@
       "gencad": "",
       "idf": "",
       "netlist": "",
-      "plot": "",
+      "plot": "Gerber Files",
       "pos_files": "",
       "specctra_dsn": "../../../../../Downloads/PCB.dsn",
       "step": "",
