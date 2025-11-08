@@ -42,7 +42,7 @@ void setup() {
   // pwm_config_set_phase_correct(slice_num_2, 1);
 
   
-  for (int freq = 40; freq <= 500; freq+=2) {
+  for (int freq = 200; freq <= 400; freq+=2) {
     Serial.println(freq);
     int totalPeriod = 1000000 / freq;
     // float ratio = 100000*freq/200*(maxDutyCycle-minDutyCycle);
@@ -100,7 +100,7 @@ uint slice_num_1 = pwm_gpio_to_slice_num(pwmPin1);
 uint slice_num_2 = pwm_gpio_to_slice_num(pwmPin3);
 
 void loop() {
-  freq = 500;
+  freq = 400;
   totalPeriod = 1000000 / freq;
   uint32_t Current_Micros=micros();
   float dutyCycle = maxDutyCycle;
