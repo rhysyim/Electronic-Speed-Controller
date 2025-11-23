@@ -5,12 +5,11 @@
 const int pwmPin1 = 8;
 const int pwmPin2 = 9;
 const int pwmPin3 = 10;
-const int comparatorPin = 13;
 
 unsigned long long int prevMicros = 0;
 int freq = 10;
 int totalPeriod = 1000000 / freq;
-int clockCycles = 2500;
+int clockCycles = 13300;
 float minDutyCycle = 0.6;
 float maxDutyCycle = 0.6;
 
@@ -18,7 +17,6 @@ uint32_t Current_Micros = micros();
 
 void setup() {
   Serial.begin(9600);
-  analogWriteFreq(250000);
   pinMode(pwmPin1,OUTPUT);
   pinMode(pwmPin2,OUTPUT);
   pinMode(pwmPin3,OUTPUT);
@@ -38,8 +36,10 @@ void setup() {
   pwm_set_wrap(slice_num_1, clockCycles);
   pwm_set_wrap(slice_num_2, clockCycles);
 
-  // pwm_config_set_phase_correct(slice_num_1, 1);
-  // pwm_config_set_phase_correct(slice_num_2, 1);
+  // pwm_config config = pwm_get_default_config();
+  // pwm_config_set_phase_correct(&config, true);
+  // pwm_init(slice_num_1, &config, true);
+  // pwm_init(slice_num_2, &config, true);
 
   
   for (int freq = 200; freq <= 400; freq+=2) {
