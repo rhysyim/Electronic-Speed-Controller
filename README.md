@@ -1,0 +1,1 @@
+The code used previously with PWM frequency fixed is version 8. There are still some issues with the phase correct mode. I think the approach is incorrect with trapezoidal and sinusoidal control mixed up. A fully sinusoidal control is in v9 (which still doesn't work). Oscilloscope traces for sinusoidal control is in Nov 2025 folder.
