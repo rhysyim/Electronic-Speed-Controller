@@ -1,0 +1,78 @@
+#include <Wire.h>
+#include <Adafruit_ADS1X15.h>
+#include <math.h>
+
+Adafruit_ADS1015 ads;  // Create ADS1015 object
+
+// Thermistor constants
+const float R_SERIES = 10000.0;
+const float R0 = 10000.0;
+const float B = 3435.0;
+const float T0 = 25.0 + 273.15;
+
+// Pi Pico supplies 3.3V to your voltage divider
+const float VREF_ACTUAL = 3.3;
+const float VREF_PGA = 4.096;  // For GAIN_ONE setting
+const float ADC_MAX = 2047.0;  // ADS1015 11-bit for single-ended
+
+float adcToTemp(int16_t adcValue) {
+  // Convert ADC reading to voltage
+  float Vout = adcValue * (VREF_PGA / ADC_MAX);
+  
+  if (Vout >= VREF_ACTUAL || Vout <= 0) {
+    return NAN;
+  }
+  
+  // Calculate thermistor resistance from voltage divider
+  float Rtherm = R_SERIES * (Vout / (VREF_ACTUAL - Vout));
+  
+  // Apply Beta parameter equation
+  float T = 1.0 / ((1.0 / T0) + (1.0 / B) * log(Rtherm / R0));
+  
+  return T - 273.15;
+}
+
+void setup() {
+  Serial.begin(9600);
+  Wire.begin();
+  // Wait for serial port to connect
+  while (!Serial) {
+    delay(10);
+  }
+  
+  Serial.println("ADS1015 Thermistor Temperature Monitor");
+  Serial.println("--------------------------------------");
+  
+  // Initialize ADS1015 at default address 0x48
+  if (!ads.begin(0x48)) {
+    Serial.println("Failed to initialize ADS1015. Check wiring!");
+    while (1);
+  }
+  
+  // Set gain to ±4.096V range
+  ads.setGain(GAIN_ONE);
+  
+  Serial.println("ADS1015 initialized successfully");
+  Serial.println();
+}
+
+void loop() {
+  int16_t AH_raw = ads.readADC_SingleEnded(3);
+  
+  // Convert to temperature
+  float AH = adcToTemp(AH_raw);
+  
+  // Display results
+  Serial.print("Channel A1 - Raw ADC: ");
+  Serial.print(AH_raw);
+  Serial.print(" | Temperature: ");
+  
+  if (isnan(AH)) {
+    Serial.println("ERROR (Invalid reading)");
+  } else {
+    Serial.print(AH, 2);
+    Serial.println(" °C");
+  }
+  
+  delay(500);
+}
