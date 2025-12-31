@@ -1,31 +1,166 @@
 #include <Wire.h>
+#include <Adafruit_ADS1X15.h>
+#include <math.h>
+
+Adafruit_ADS1015 ads;  // Create ADS1015 object
+Adafruit_ADS1015 ads1;
+
+// Thermistor constants
+const float R_SERIES = 10000.0;
+const float R0 = 10000.0;
+const float B = 3435.0;
+const float T0 = 25.0 + 273.15;
+
+// Pi Pico supplies 3.3V to your voltage divider
+const float VREF_ACTUAL = 3.3;
+const float VREF_PGA = 4.096;  // For GAIN_ONE setting
+const float ADC_MAX = 2047.0;  // ADS1015 11-bit for single-ended
+
+float adcToTemp(int16_t adcValue) {
+  // Convert ADC reading to voltage
+  float Vout = adcValue * (VREF_PGA / ADC_MAX);
+  
+  if (Vout >= VREF_ACTUAL || Vout <= 0) {
+    return NAN;
+  }
+  
+  // Calculate thermistor resistance from voltage divider
+  float Rtherm = R_SERIES * (Vout / (VREF_ACTUAL - Vout));
+  
+  // Apply Beta parameter equation
+  float T = 1.0 / ((1.0 / T0) + (1.0 / B) * log(Rtherm / R0));
+  
+  return T - 273.15;
+}
 
 void setup() {
-  Wire.begin();          // Initialize I2C0 (SDA=GP0, SCL=GP1)
-  Serial.begin(115200);  // Open serial monitor
-  while (!Serial);
+  Serial.begin(9600);
+  Wire.setClock(100000);
+  Wire.setSCL(1);
+  Wire.setSDA(0);
+  Wire.begin();
+  // Wait for serial port to connect
+  while (!Serial) {
+    delay(10);
+  }
+  
+  Serial.println("ADS1015 Thermistor Temperature Monitor");
+  Serial.println("--------------------------------------");
+  
+  // Initialize ADS1015 at default address 0x48
+  if (!ads.begin(0x48)) {
+    Serial.println("Failed to initialize ADS1015. Check wiring!");
+    while (1);
+  }
 
-  Serial.println("I2C Scanner");
+  if (!ads1.begin(0x49)) {
+    Serial.println("Failed to initialize ADS1015. Check wiring!");
+    while (1);
+  }
+  
+  // Set gain to ±4.096V range
+  ads.setGain(GAIN_ONE);
+  ads1.setGain(GAIN_ONE);
+  
+  Serial.println("ADS1015 initialized successfully");
+  Serial.println();
 }
 
 void loop() {
-  byte count = 0;
-  for (byte addr = 1; addr < 127; addr++) {
-    Wire.beginTransmission(addr);
-    if (Wire.endTransmission() == 0) {
-      Serial.print("Found device at 0x");
-      if (addr < 16) Serial.print("0");
-      Serial.println(addr, HEX);
-      count++;
-    }
-  }
+  int16_t AH_raw = ads1.readADC_SingleEnded(3);
+  int16_t AL_raw = ads1.readADC_SingleEnded(2);
+  int16_t BH_raw = ads1.readADC_SingleEnded(1);
+  int16_t BL_raw = ads1.readADC_SingleEnded(0);
+  int16_t CH_raw = ads.readADC_SingleEnded(3);
+  int16_t CL_raw = ads.readADC_SingleEnded(2);
 
-  if (count == 0) {
-    Serial.println("No I2C devices found");
+  float AH = adcToTemp(AH_raw);
+  float AL = adcToTemp(AL_raw);
+  float BH = adcToTemp(BH_raw);
+  float BL = adcToTemp(BL_raw);
+  float CH = adcToTemp(CH_raw);
+  float CL = adcToTemp(CL_raw);
+  
+  // Display results
+  Serial.print("AH:");  
+  if (isnan(AH)) {
+    Serial.println("ERROR (Invalid reading)");
   } else {
-    Serial.print("Total devices found: ");
-    Serial.println(count);
+    Serial.print(AH, 2);
+  }
+  
+  Serial.print(", AL:");
+  if (isnan(AL)) {
+    Serial.println("ERROR (Invalid reading)");
+  } else {
+    Serial.print(AL, 2);
   }
 
-  delay(3000); // Wait 3 seconds before scanning again
+  Serial.print(", BH:");
+  if (isnan(BH)) {
+    Serial.println("ERROR (Invalid reading)");
+  } else {
+    Serial.print(BH, 2);
+  }
+
+  Serial.print(", BL:");
+  if (isnan(BL)) {
+    Serial.println("ERROR (Invalid reading)");
+  } else {
+    Serial.print(BL, 2);
+  }
+
+  Serial.print(", CH:");
+  if (isnan(CH)) {
+    Serial.println("ERROR (Invalid reading)");
+  } else {
+    Serial.print(CH, 2);
+  }
+
+  Serial.print(", CL:");
+  if (isnan(CL)) {
+    Serial.println("ERROR (Invalid reading)");
+  } else {
+    Serial.println(CL, 2);
+  }
+
+  delay(500);
 }
+
+
+// Scan for I2C device on I2C0
+
+// #include <Wire.h>
+
+// void setup() {
+//   Wire.setSCL(1);
+//   Wire.setSDA(0);
+//   Wire.setClock(100000);
+//   Wire.begin();          // Initialize I2C0 (SDA=GP0, SCL=GP1)
+//   Serial.begin(115200);  // Open serial monitor
+//   while (!Serial);
+
+//   Serial.println("I2C Scanner");
+// }
+
+// void loop() {
+//   byte count = 0;
+//   for (byte addr = 1; addr < 127; addr++) {
+//     Wire.beginTransmission(addr);
+//     if (Wire.endTransmission() == 0) {
+//       Serial.print("Found device at 0x");
+//       if (addr < 16) Serial.print("0");
+//       Serial.println(addr, HEX);
+//       count++;
+//     }
+//   }
+
+//   if (count == 0) {
+//     Serial.println("No I2C devices found");
+//   } else {
+//     Serial.print("Total devices found: ");
+//     Serial.println(count);
+//   }
+
+//   delay(3000); // Wait 3 seconds before scanning again
+// }
